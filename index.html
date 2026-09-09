@@ -4,218 +4,51 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Spanish Phrases</title>
-
-<!-- iPad "Add to Home Screen" support: full-screen app + icon -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Spanish">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23b8134f'/%3E%3Ctext x='50' y='64' font-size='46' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'%3E%C2%A1H!%3C/text%3E%3C/svg%3E">
-
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  body {
-    margin: 0;
-    font-family: -apple-system, 'Segoe UI', Verdana, sans-serif;
-    background: #fffaf3;
-    color: #1a1a2e;
-    padding: 16px 14px 60px 14px;
-    padding-top: max(16px, env(safe-area-inset-top));
-    padding-bottom: max(60px, env(safe-area-inset-bottom));
-  }
-  .wrap { max-width: 640px; margin: 0 auto; }
-  h1 {
-    font-size: 26px;
-    color: #b8134f;
-    text-align: center;
-    margin: 4px 0 14px 0;
-  }
-
-  /* Top toolbar */
-  .toolbar {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 16px;
-  }
-  .toolbar button {
-    border: 2px solid #4a3b78;
-    background: white;
-    color: #4a3b78;
-    border-radius: 8px;
-    padding: 8px 14px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  .toolbar button.active { background: #4a3b78; color: white; }
-  .toolbar button.add-section { border-color: #06805f; color: #06805f; }
-
-  /* Sections */
-  .section {
-    margin-bottom: 20px;
-    border-radius: 14px;
-    padding: 4px 14px 12px 14px;
-    border: 2px solid #ccc;
-  }
-  .section-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 12px 0 10px 0;
-    gap: 8px;
-  }
-  .section-head h2 {
-    font-size: 18px;
-    margin: 0;
-    flex: 1;
-  }
-  .icon-btn {
-    border: none;
-    background: transparent;
-    font-size: 18px;
-    cursor: pointer;
-    padding: 4px 6px;
-    color: #6b6b7d;
-  }
-
-  .row {
-    background: white;
-    border-radius: 10px;
-    padding: 10px 12px;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    border-left: 6px solid #ffb703;
-  }
-  .text { flex: 1; min-width: 0; }
-  .spanish { font-size: 17px; font-weight: 700; display: block; }
-  .english { font-size: 13px; color: #4a3b78; font-weight: 600; display: block; }
-
-  .row-actions { display: flex; gap: 4px; flex-shrink: 0; }
-  .listen-btn {
-    border: none;
-    background: #4a3b78;
-    color: white;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  .listen-btn.playing { background: #b8134f; }
-  .edit-btn, .del-btn {
-    border: none;
-    background: #f0f0f0;
-    color: #4a3b78;
-    border-radius: 50%;
-    width: 34px;
-    height: 34px;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  .del-btn { color: #b8134f; }
-
-  /* Add phrase form */
-  .add-row {
-    display: none;
-    background: #fbfbfb;
-    border: 1px dashed #bbb;
-    border-radius: 10px;
-    padding: 10px;
-    margin-top: 6px;
-  }
-  .add-row.open { display: block; }
-  .add-row input {
-    width: 100%;
-    padding: 8px 10px;
-    margin-bottom: 6px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 15px;
-  }
-  .add-row .btns { display: flex; gap: 8px; }
-  .add-row button {
-    flex: 1;
-    padding: 8px;
-    border-radius: 6px;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  .save-btn { background: #06805f; color: white; }
-  .cancel-btn { background: #eee; color: #444; }
-
-  .add-phrase-trigger {
-    width: 100%;
-    text-align: center;
-    background: none;
-    border: 1px dashed #bbb;
-    border-radius: 10px;
-    padding: 8px;
-    color: #6b6b7d;
-    font-size: 14px;
-    cursor: pointer;
-    margin-top: 4px;
-  }
-
-  .new-section-form {
-    display: none;
-    background: white;
-    border: 2px dashed #4a3b78;
-    border-radius: 14px;
-    padding: 14px;
-    margin-bottom: 20px;
-  }
-  .new-section-form.open { display: block; }
-  .new-section-form input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 8px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 15px;
-  }
-
-  .note {
-    font-size: 12px;
-    color: #6b6b7d;
-    text-align: center;
-    margin-top: 24px;
-    line-height: 1.5;
-  }
-  .no-support {
-    display: none;
-    background: #ffe8e8;
-    border: 1px solid #d9376e;
-    color: #92123f;
-    padding: 12px 14px;
-    border-radius: 10px;
-    font-size: 14px;
-    margin-bottom: 16px;
-  }
-  .empty-msg {
-    text-align: center;
-    color: #999;
-    font-size: 13px;
-    padding: 10px;
-  }
+  body { margin:0; font-family:-apple-system,'Segoe UI',Verdana,sans-serif; background:#fffaf3; color:#1a1a2e; padding:16px 14px 60px 14px; padding-top:max(16px, env(safe-area-inset-top)); padding-bottom:max(60px, env(safe-area-inset-bottom)); }
+  .wrap { max-width:640px; margin:0 auto; }
+  h1 { font-size:26px; color:#b8134f; text-align:center; margin:4px 0 14px 0; }
+  .toolbar { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:16px; }
+  .toolbar button { border:2px solid #4a3b78; background:white; color:#4a3b78; border-radius:8px; padding:8px 14px; font-size:14px; font-weight:600; cursor:pointer; }
+  .toolbar button.active { background:#4a3b78; color:white; }
+  .section { margin-bottom:20px; border-radius:14px; padding:4px 14px 12px 14px; border:2px solid #ccc; }
+  .section-head { display:flex; align-items:center; justify-content:space-between; margin:12px 0 10px 0; gap:8px; }
+  .section-head h2 { font-size:18px; margin:0; flex:1; }
+  .icon-btn { border:none; background:transparent; font-size:18px; cursor:pointer; padding:4px 6px; color:#6b6b7d; }
+  .row { background:white; border-radius:10px; padding:10px 12px; margin-bottom:8px; display:flex; align-items:center; justify-content:space-between; gap:8px; border-left:6px solid #ffb703; }
+  .text { flex:1; min-width:0; }
+  .spanish { font-size:17px; font-weight:700; display:block; }
+  .english { font-size:13px; color:#4a3b78; font-weight:600; display:block; }
+  .row-actions { display:flex; gap:4px; flex-shrink:0; }
+  .listen-btn { border:none; background:#4a3b78; color:white; border-radius:50%; width:40px; height:40px; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .listen-btn.playing { background:#b8134f; }
+  .edit-btn, .del-btn { border:none; background:#f0f0f0; color:#4a3b78; border-radius:50%; width:34px; height:34px; font-size:14px; cursor:pointer; }
+  .del-btn { color:#b8134f; }
+  .add-row { display:none; background:#fbfbfb; border:1px dashed #bbb; border-radius:10px; padding:10px; margin-top:6px; }
+  .add-row.open { display:block; }
+  .add-row input { width:100%; padding:8px 10px; margin-bottom:6px; border:1px solid #ccc; border-radius:6px; font-size:15px; }
+  .add-row .btns { display:flex; gap:8px; }
+  .add-row button { flex:1; padding:8px; border-radius:6px; border:none; font-weight:600; cursor:pointer; }
+  .save-btn { background:#06805f; color:white; }
+  .cancel-btn { background:#eee; color:#444; }
+  .add-phrase-trigger { width:100%; text-align:center; background:none; border:1px dashed #bbb; border-radius:10px; padding:8px; color:#6b6b7d; font-size:14px; cursor:pointer; margin-top:4px; }
+  .new-section-form { display:none; background:white; border:2px dashed #4a3b78; border-radius:14px; padding:14px; margin-bottom:20px; }
+  .new-section-form.open { display:block; }
+  .new-section-form input { width:100%; padding:10px; margin-bottom:8px; border:1px solid #ccc; border-radius:6px; font-size:15px; }
+  .note { font-size:12px; color:#6b6b7d; text-align:center; margin-top:24px; line-height:1.5; }
+  .no-support { display:none; background:#ffe8e8; border:1px solid #d9376e; color:#92123f; padding:12px 14px; border-radius:10px; font-size:14px; margin-bottom:16px; }
+  .empty-msg { text-align:center; color:#999; font-size:13px; padding:10px; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>Spanish Phrases</h1>
-
-  <div class="no-support" id="noSupport">
-    Your browser doesn't support text-to-speech. Try Safari or Chrome.
-  </div>
-
+  <div class="no-support" id="noSupport">Your browser doesn't support text-to-speech. Try Safari or Chrome.</div>
   <div class="toolbar">
     <button data-rate="0.6" id="slowBtn">Slow speed</button>
     <button data-rate="0.85" id="normalBtn" class="active">Normal speed</button>
@@ -224,12 +57,10 @@
     <button id="importBtn">⬆️ Restore</button>
     <input type="file" id="importFile" accept="application/json" style="display:none">
   </div>
-
   <div id="sections"></div>
-
   <button class="add-phrase-trigger" id="addSectionTrigger" style="display:none;">+ Add a new section (e.g. for today's words)</button>
   <div class="new-section-form" id="newSectionForm">
-    <input type="text" id="newSectionTitle" placeholder="Section title, e.g. 4. Miércoles 9 de septiembre">
+    <input type="text" id="newSectionTitle" placeholder="Section title, e.g. 5. Miércoles 16 de septiembre">
     <div class="add-row" style="display:block;">
       <div class="btns">
         <button class="save-btn" id="saveSectionBtn">Add section</button>
@@ -237,7 +68,6 @@
       </div>
     </div>
   </div>
-
   <p class="note">
     Tap 🔊 to hear a phrase spoken aloud. To add new words from the teacher,
     the phrase list in the file gets updated and redeployed — every iPad
@@ -250,20 +80,13 @@
 /* ---------- Default starter data ----------
    IMPORTANT: bump DATA_VERSION any time you edit the phrase list below
    and redeploy. This tells every iPad "there's a new version on the
-   server" so it replaces its saved copy with this one automatically.
-   If you only edit phrases without bumping the version, devices that
-   already have a saved copy will NOT see the change. ---------- */
-const DATA_VERSION = 1;
+   server" so it replaces its saved copy with this one automatically. */
+const DATA_VERSION = 2;
 
 const DEFAULT_DATA = {
   version: DATA_VERSION,
   sections: [
-    {
-      id: "s1",
-      title: "1. Greetings & Goodbyes",
-      color: "#d9376e",
-      bg: "#fff2f6",
-      phrases: [
+    { id: "s1", title: "1. Greetings & Goodbyes", color: "#d9376e", bg: "#fff2f6", phrases: [
         ["Hola", "Hello / Hi"],
         ["Buenos días", "Good morning"],
         ["Buenas tardes", "Good afternoon"],
@@ -273,14 +96,8 @@ const DEFAULT_DATA = {
         ["Hasta pronto", "See you soon"],
         ["Hasta mañana", "See you tomorrow"],
         ["Hasta luego", "See you later"]
-      ]
-    },
-    {
-      id: "s2",
-      title: "2. El Español en el Aula — Classroom Phrases",
-      color: "#06805f",
-      bg: "#edfaf4",
-      phrases: [
+    ]},
+    { id: "s2", title: "2. El Español en el Aula — Classroom Phrases", color: "#06805f", bg: "#edfaf4", phrases: [
         ["Mirad la pizarra", "Look at the board"],
         ["Escuchad por favor", "Please listen"],
         ["Sacad los libros", "Take out your books"],
@@ -294,14 +111,8 @@ const DEFAULT_DATA = {
         ["Levantaos", "Stand up"],
         ["Trabajad en parejas", "Work in pairs"],
         ["Trabajad en grupos", "Work in groups"]
-      ]
-    },
-    {
-      id: "s3",
-      title: "3. Useful Classroom Phrases",
-      color: "#2457c5",
-      bg: "#eef3ff",
-      phrases: [
+    ]},
+    { id: "s3", title: "3. Useful Classroom Phrases", color: "#2457c5", bg: "#eef3ff", phrases: [
         ["Por favor", "Please"],
         ["Gracias", "Thanks"],
         ["De nada", "You're welcome"],
@@ -315,8 +126,15 @@ const DEFAULT_DATA = {
         ["¿Puedo ir a mi taquilla?", "Can I go to my locker?"],
         ["Tenemos deberes", "We have homework"],
         ["Profesor / Profesora", "Teacher"]
-      ]
-    }
+    ]},
+    { id: "s4", title: "4. Names & Introductions", color: "#a4740a", bg: "#fff8e8", phrases: [
+        ["¿Qué tal?", "How are you?"],
+        ["Muy bien", "Very well"],
+        ["¿Cómo te llamas?", "What's your name?"],
+        ["Me llamo...", "My name is..."],
+        ["¿Cuál es tu apellido?", "What's your surname?"],
+        ["Mi apellido es...", "My surname is..."]
+    ]}
   ]
 };
 
@@ -329,12 +147,7 @@ function loadData() {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const saved = JSON.parse(raw);
-      // If the file's built-in version is newer than what's saved on
-      // this device, the word list was updated and redeployed — use
-      // the fresh copy from the file instead of the stale local one.
-      if (saved.version === DATA_VERSION) {
-        return saved;
-      }
+      if (saved.version === DATA_VERSION) return saved;
     }
   } catch (e) {}
   return JSON.parse(JSON.stringify(DEFAULT_DATA));
@@ -349,13 +162,9 @@ let editMode = false;
 let currentRate = 0.85;
 let spanishVoice = null;
 
-/* ---------- Speech ---------- */
 function pickVoice() {
   const voices = window.speechSynthesis.getVoices();
-  spanishVoice =
-    voices.find(v => v.lang === 'es-ES') ||
-    voices.find(v => v.lang && v.lang.startsWith('es')) ||
-    null;
+  spanishVoice = voices.find(v => v.lang === 'es-ES') || voices.find(v => v.lang && v.lang.startsWith('es')) || null;
 }
 if (!('speechSynthesis' in window)) {
   document.getElementById('noSupport').style.display = 'block';
@@ -366,7 +175,7 @@ if (!('speechSynthesis' in window)) {
 function speak(text, btn) {
   if (!('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
-  const utter = new SpeechSynthesisUtterance(text);
+  const utter = new SpeechSynthesisUtterance(text.replace(/\.\.\./g, ''));
   utter.lang = 'es-ES';
   utter.rate = currentRate;
   if (spanishVoice) utter.voice = spanishVoice;
@@ -377,224 +186,106 @@ function speak(text, btn) {
   window.speechSynthesis.speak(utter);
 }
 
-/* ---------- Rendering ---------- */
 function render() {
   const container = document.getElementById('sections');
   container.innerHTML = '';
-
   data.sections.forEach(section => {
     const sec = document.createElement('div');
     sec.className = 'section';
     sec.style.background = section.bg;
     sec.style.borderColor = section.color;
-
     const head = document.createElement('div');
     head.className = 'section-head';
     head.innerHTML = `<h2 style="color:${section.color}">${escapeHtml(section.title)}</h2>`;
     if (editMode) {
       const delSecBtn = document.createElement('button');
-      delSecBtn.className = 'icon-btn';
-      delSecBtn.textContent = '🗑️';
-      delSecBtn.title = 'Delete whole section';
+      delSecBtn.className = 'icon-btn'; delSecBtn.textContent = '🗑️'; delSecBtn.title = 'Delete whole section';
       delSecBtn.addEventListener('click', () => {
         if (confirm(`Delete the whole section "${section.title}"? This can't be undone.`)) {
-          data.sections = data.sections.filter(s => s.id !== section.id);
-          saveData();
-          render();
+          data.sections = data.sections.filter(s => s.id !== section.id); saveData(); render();
         }
       });
       head.appendChild(delSecBtn);
     }
     sec.appendChild(head);
-
     if (section.phrases.length === 0) {
-      const empty = document.createElement('div');
-      empty.className = 'empty-msg';
-      empty.textContent = 'No phrases yet — add one below.';
-      sec.appendChild(empty);
+      const empty = document.createElement('div'); empty.className = 'empty-msg';
+      empty.textContent = 'No phrases yet — add one below.'; sec.appendChild(empty);
     }
-
     section.phrases.forEach((phrase, idx) => {
-      const row = document.createElement('div');
-      row.className = 'row';
-      row.style.borderLeftColor = section.color;
-
-      const text = document.createElement('div');
-      text.className = 'text';
+      const row = document.createElement('div'); row.className = 'row'; row.style.borderLeftColor = section.color;
+      const text = document.createElement('div'); text.className = 'text';
       text.innerHTML = `<span class="spanish" lang="es">${escapeHtml(phrase[0])}</span><span class="english" lang="en">${escapeHtml(phrase[1])}</span>`;
       row.appendChild(text);
-
-      const actions = document.createElement('div');
-      actions.className = 'row-actions';
-
-      const listenBtn = document.createElement('button');
-      listenBtn.className = 'listen-btn';
-      listenBtn.textContent = '🔊';
+      const actions = document.createElement('div'); actions.className = 'row-actions';
+      const listenBtn = document.createElement('button'); listenBtn.className = 'listen-btn'; listenBtn.textContent = '🔊';
       listenBtn.setAttribute('aria-label', 'Listen');
       listenBtn.addEventListener('click', () => speak(phrase[0], listenBtn));
       actions.appendChild(listenBtn);
-
       if (editMode) {
-        const editBtn = document.createElement('button');
-        editBtn.className = 'edit-btn';
-        editBtn.textContent = '✏️';
-        editBtn.addEventListener('click', () => editPhrase(section, idx));
-        actions.appendChild(editBtn);
-
-        const delBtn = document.createElement('button');
-        delBtn.className = 'del-btn';
-        delBtn.textContent = '✕';
-        delBtn.addEventListener('click', () => {
-          section.phrases.splice(idx, 1);
-          saveData();
-          render();
-        });
-        actions.appendChild(delBtn);
+        const editBtn = document.createElement('button'); editBtn.className = 'edit-btn'; editBtn.textContent = '✏️';
+        editBtn.addEventListener('click', () => editPhrase(section, idx)); actions.appendChild(editBtn);
+        const delBtn = document.createElement('button'); delBtn.className = 'del-btn'; delBtn.textContent = '✕';
+        delBtn.addEventListener('click', () => { section.phrases.splice(idx, 1); saveData(); render(); }); actions.appendChild(delBtn);
       }
-
-      row.appendChild(actions);
-      sec.appendChild(row);
+      row.appendChild(actions); sec.appendChild(row);
     });
-
     if (editMode) {
-      const addTrigger = document.createElement('button');
-      addTrigger.className = 'add-phrase-trigger';
+      const addTrigger = document.createElement('button'); addTrigger.className = 'add-phrase-trigger';
       addTrigger.textContent = '+ Add a phrase to this section';
-      const addForm = document.createElement('div');
-      addForm.className = 'add-row';
-      addForm.innerHTML = `
-        <input type="text" placeholder="Spanish phrase" class="new-sp">
-        <input type="text" placeholder="English meaning" class="new-en">
-        <div class="btns">
-          <button class="save-btn">Add</button>
-          <button class="cancel-btn">Cancel</button>
-        </div>
-      `;
-      addTrigger.addEventListener('click', () => {
-        addForm.classList.add('open');
-        addTrigger.style.display = 'none';
-      });
-      const spInput = addForm.querySelector('.new-sp');
-      const enInput = addForm.querySelector('.new-en');
+      const addForm = document.createElement('div'); addForm.className = 'add-row';
+      addForm.innerHTML = `<input type="text" placeholder="Spanish phrase" class="new-sp"><input type="text" placeholder="English meaning" class="new-en"><div class="btns"><button class="save-btn">Add</button><button class="cancel-btn">Cancel</button></div>`;
+      addTrigger.addEventListener('click', () => { addForm.classList.add('open'); addTrigger.style.display = 'none'; });
+      const spInput = addForm.querySelector('.new-sp'), enInput = addForm.querySelector('.new-en');
       addForm.querySelector('.save-btn').addEventListener('click', () => {
-        const sp = spInput.value.trim();
-        const en = enInput.value.trim();
+        const sp = spInput.value.trim(), en = enInput.value.trim();
         if (!sp) { spInput.focus(); return; }
-        section.phrases.push([sp, en]);
-        saveData();
-        render();
+        section.phrases.push([sp, en]); saveData(); render();
       });
-      addForm.querySelector('.cancel-btn').addEventListener('click', () => {
-        addForm.classList.remove('open');
-        addTrigger.style.display = 'block';
-      });
-      sec.appendChild(addTrigger);
-      sec.appendChild(addForm);
+      addForm.querySelector('.cancel-btn').addEventListener('click', () => { addForm.classList.remove('open'); addTrigger.style.display = 'block'; });
+      sec.appendChild(addTrigger); sec.appendChild(addForm);
     }
-
     container.appendChild(sec);
   });
-
   document.getElementById('addSectionTrigger').style.display = editMode ? 'block' : 'none';
 }
-
 function editPhrase(section, idx) {
   const [sp, en] = section.phrases[idx];
-  const newSp = prompt("Spanish phrase:", sp);
-  if (newSp === null) return;
-  const newEn = prompt("English meaning:", en);
-  if (newEn === null) return;
-  section.phrases[idx] = [newSp.trim(), newEn.trim()];
-  saveData();
-  render();
+  const newSp = prompt("Spanish phrase:", sp); if (newSp === null) return;
+  const newEn = prompt("English meaning:", en); if (newEn === null) return;
+  section.phrases[idx] = [newSp.trim(), newEn.trim()]; saveData(); render();
 }
+function escapeHtml(str) { const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
 
-function escapeHtml(str) {
-  const d = document.createElement('div');
-  d.textContent = str;
-  return d.innerHTML;
-}
-
-/* ---------- Toolbar wiring ---------- */
-document.getElementById('slowBtn').addEventListener('click', function() {
-  currentRate = 0.6;
-  this.classList.add('active');
-  document.getElementById('normalBtn').classList.remove('active');
-});
-document.getElementById('normalBtn').addEventListener('click', function() {
-  currentRate = 0.85;
-  this.classList.add('active');
-  document.getElementById('slowBtn').classList.remove('active');
-});
-document.getElementById('editModeBtn').addEventListener('click', function() {
-  editMode = !editMode;
-  this.classList.toggle('active', editMode);
-  this.textContent = editMode ? '✅ Done editing' : '✏️ Edit words';
-  render();
-});
-
+document.getElementById('slowBtn').addEventListener('click', function() { currentRate = 0.6; this.classList.add('active'); document.getElementById('normalBtn').classList.remove('active'); });
+document.getElementById('normalBtn').addEventListener('click', function() { currentRate = 0.85; this.classList.add('active'); document.getElementById('slowBtn').classList.remove('active'); });
+document.getElementById('editModeBtn').addEventListener('click', function() { editMode = !editMode; this.classList.toggle('active', editMode); this.textContent = editMode ? '✅ Done editing' : '✏️ Edit words'; render(); });
 document.getElementById('exportBtn').addEventListener('click', () => {
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'spanish-phrases-backup.json';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  const url = URL.createObjectURL(blob); const a = document.createElement('a');
+  a.href = url; a.download = 'spanish-phrases-backup.json'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
 });
-
-document.getElementById('importBtn').addEventListener('click', () => {
-  document.getElementById('importFile').click();
-});
+document.getElementById('importBtn').addEventListener('click', () => document.getElementById('importFile').click());
 document.getElementById('importFile').addEventListener('change', (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+  const file = e.target.files[0]; if (!file) return;
   const reader = new FileReader();
   reader.onload = (evt) => {
     try {
       const parsed = JSON.parse(evt.target.result);
       if (!parsed.sections) throw new Error('bad format');
-      if (confirm('Replace the current word list with this backup?')) {
-        data = parsed;
-        saveData();
-        render();
-      }
-    } catch (err) {
-      alert('That file doesn\'t look like a valid backup.');
-    }
+      if (confirm('Replace the current word list with this backup?')) { data = parsed; saveData(); render(); }
+    } catch (err) { alert("That file doesn't look like a valid backup."); }
   };
-  reader.readAsText(file);
-  e.target.value = '';
+  reader.readAsText(file); e.target.value = '';
 });
-
-document.getElementById('addSectionTrigger').addEventListener('click', () => {
-  document.getElementById('newSectionForm').classList.add('open');
-  document.getElementById('addSectionTrigger').style.display = 'none';
-});
-document.getElementById('cancelSectionBtn').addEventListener('click', () => {
-  document.getElementById('newSectionForm').classList.remove('open');
-  document.getElementById('addSectionTrigger').style.display = 'block';
-  document.getElementById('newSectionTitle').value = '';
-});
+document.getElementById('addSectionTrigger').addEventListener('click', () => { document.getElementById('newSectionForm').classList.add('open'); document.getElementById('addSectionTrigger').style.display = 'none'; });
+document.getElementById('cancelSectionBtn').addEventListener('click', () => { document.getElementById('newSectionForm').classList.remove('open'); document.getElementById('addSectionTrigger').style.display = 'block'; document.getElementById('newSectionTitle').value = ''; });
 document.getElementById('saveSectionBtn').addEventListener('click', () => {
-  const title = document.getElementById('newSectionTitle').value.trim();
-  if (!title) return;
+  const title = document.getElementById('newSectionTitle').value.trim(); if (!title) return;
   const n = data.sections.length;
-  data.sections.push({
-    id: 's' + Date.now(),
-    title: title,
-    color: PALETTE[n % PALETTE.length],
-    bg: PALETTE_BG[n % PALETTE_BG.length],
-    phrases: []
-  });
-  saveData();
-  document.getElementById('newSectionForm').classList.remove('open');
-  document.getElementById('newSectionTitle').value = '';
-  render();
+  data.sections.push({ id: 's' + Date.now(), title, color: PALETTE[n % PALETTE.length], bg: PALETTE_BG[n % PALETTE_BG.length], phrases: [] });
+  saveData(); document.getElementById('newSectionForm').classList.remove('open'); document.getElementById('newSectionTitle').value = ''; render();
 });
-
 render();
 </script>
 </body>
