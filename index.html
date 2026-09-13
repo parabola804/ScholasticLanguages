@@ -24,6 +24,8 @@
   .text { flex:1; min-width:0; }
   .spanish { font-size:17px; font-weight:700; display:block; }
   .english { font-size:13px; color:#4a3b78; font-weight:600; display:block; }
+  .phonetic { font-size:13px; color:#1d2a5a; font-family:Menlo,'DejaVu Sans Mono','Courier New',monospace; display:block; margin-top:2px; }
+  body.hide-phonetics .phonetic { display:none; }
   .row-actions { display:flex; gap:4px; flex-shrink:0; }
   .listen-btn { border:none; background:#4a3b78; color:white; border-radius:50%; width:40px; height:40px; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
   .listen-btn.playing { background:#b8134f; }
@@ -52,6 +54,7 @@
   <div class="toolbar">
     <button data-rate="0.6" id="slowBtn">Slow speed</button>
     <button data-rate="0.85" id="normalBtn" class="active">Normal speed</button>
+    <button id="phoneticBtn" class="active">🔤 Sounds like</button>
     <button id="editModeBtn">✏️ Edit words</button>
     <button id="exportBtn">⬇️ Backup</button>
     <button id="importBtn">⬆️ Restore</button>
@@ -60,7 +63,7 @@
   <div id="sections"></div>
   <button class="add-phrase-trigger" id="addSectionTrigger" style="display:none;">+ Add a new section (e.g. for today's words)</button>
   <div class="new-section-form" id="newSectionForm">
-    <input type="text" id="newSectionTitle" placeholder="Section title, e.g. 5. Miércoles 16 de septiembre">
+    <input type="text" id="newSectionTitle" placeholder="Section title, e.g. 6. Miércoles 16 de septiembre">
     <div class="add-row" style="display:block;">
       <div class="btns">
         <button class="save-btn" id="saveSectionBtn">Add section</button>
@@ -69,7 +72,8 @@
     </div>
   </div>
   <p class="note">
-    Tap 🔊 to hear a phrase spoken aloud. To add new words from the teacher,
+    Tap 🔊 to hear a phrase spoken aloud. The "Sounds like" button shows or
+    hides the pronunciation guide. To add new words from the teacher,
     the phrase list in the file gets updated and redeployed — every iPad
     picks up the new list automatically next time it's opened. You can also
     tap "Edit words" to make quick local changes on this iPad directly.
@@ -80,62 +84,359 @@
 /* ---------- Default starter data ----------
    IMPORTANT: bump DATA_VERSION any time you edit the phrase list below
    and redeploy. This tells every iPad "there's a new version on the
-   server" so it replaces its saved copy with this one automatically. */
-const DATA_VERSION = 2;
+   server" so it replaces its saved copy with this one automatically.
+   Each phrase is [spanish, english, soundsLike]. */
+const DATA_VERSION = 3;
 
 const DEFAULT_DATA = {
   version: DATA_VERSION,
   sections: [
-    { id: "s1", title: "1. Greetings & Goodbyes", color: "#d9376e", bg: "#fff2f6", phrases: [
-        ["Hola", "Hello / Hi"],
-        ["Buenos días", "Good morning"],
-        ["Buenas tardes", "Good afternoon"],
-        ["Buenas noches", "Good evening"],
-        ["¿Dígame?", "Hello (phone only)"],
-        ["Adiós", "Goodbye"],
-        ["Hasta pronto", "See you soon"],
-        ["Hasta mañana", "See you tomorrow"],
-        ["Hasta luego", "See you later"]
-    ]},
-    { id: "s2", title: "2. El Español en el Aula — Classroom Phrases", color: "#06805f", bg: "#edfaf4", phrases: [
-        ["Mirad la pizarra", "Look at the board"],
-        ["Escuchad por favor", "Please listen"],
-        ["Sacad los libros", "Take out your books"],
-        ["Sacad las tabletas", "Take out the tablets"],
-        ["Silencio, por favor", "Silence, please"],
-        ["Abrid los libros", "Open the books"],
-        ["Leed página 2", "Read page 2"],
-        ["Escribid en los cuadernos", "Write in the notebooks"],
-        ["Repetid", "Repeat"],
-        ["Sentaos", "Sit down"],
-        ["Levantaos", "Stand up"],
-        ["Trabajad en parejas", "Work in pairs"],
-        ["Trabajad en grupos", "Work in groups"]
-    ]},
-    { id: "s3", title: "3. Useful Classroom Phrases", color: "#2457c5", bg: "#eef3ff", phrases: [
-        ["Por favor", "Please"],
-        ["Gracias", "Thanks"],
-        ["De nada", "You're welcome"],
-        ["No entiendo", "I don't understand"],
-        ["¿Qué significa...?", "What does it mean...?"],
-        ["¿Cómo se dice...?", "How do you say...?"],
-        ["Necesito un bolígrafo / un diccionario", "I need a pen / a dictionary"],
-        ["No tengo mi cuaderno", "I don't have my notebook"],
-        ["He terminado", "I have finished"],
-        ["¿Puedo ir al baño?", "Can I go to the bathroom?"],
-        ["¿Puedo ir a mi taquilla?", "Can I go to my locker?"],
-        ["Tenemos deberes", "We have homework"],
-        ["Profesor / Profesora", "Teacher"]
-    ]},
-    { id: "s4", title: "4. Names & Introductions", color: "#a4740a", bg: "#fff8e8", phrases: [
-        ["¿Qué tal?", "How are you?"],
-        ["Muy bien", "Very well"],
-        ["¿Cómo te llamas?", "What's your name?"],
-        ["Me llamo...", "My name is..."],
-        ["¿Cuál es tu apellido?", "What's your surname?"],
-        ["Mi apellido es...", "My surname is..."]
-    ]}
-  ]
+  {
+    "id": "s1",
+    "title": "1. Greetings & Goodbyes",
+    "color": "#d9376e",
+    "bg": "#fff2f6",
+    "phrases": [
+      [
+        "Hola",
+        "Hello / Hi",
+        "OH-lah"
+      ],
+      [
+        "Buenos días",
+        "Good morning",
+        "BWEH-nohs DEE-ahs"
+      ],
+      [
+        "Buenas tardes",
+        "Good afternoon",
+        "BWEH-nahs TAR-dehs"
+      ],
+      [
+        "Buenas noches",
+        "Good evening",
+        "BWEH-nahs NOH-chehs"
+      ],
+      [
+        "¿Dígame?",
+        "Hello (phone only)",
+        "DEE-gah-meh"
+      ],
+      [
+        "Adiós",
+        "Goodbye",
+        "ah-dee-OHS"
+      ],
+      [
+        "Hasta pronto",
+        "See you soon",
+        "AHS-tah PRON-toh"
+      ],
+      [
+        "Hasta mañana",
+        "See you tomorrow",
+        "AHS-tah mahn-YAH-nah"
+      ],
+      [
+        "Hasta luego",
+        "See you later",
+        "AHS-tah LWEH-goh"
+      ]
+    ]
+  },
+  {
+    "id": "s2",
+    "title": "2. El Español en el Aula — Classroom Phrases",
+    "color": "#06805f",
+    "bg": "#edfaf4",
+    "phrases": [
+      [
+        "Mirad la pizarra",
+        "Look at the board",
+        "mee-RAHD lah pee-SAH-rrah"
+      ],
+      [
+        "Escuchad por favor",
+        "Please listen",
+        "ehs-koo-CHAHD por fah-VOR"
+      ],
+      [
+        "Sacad los libros",
+        "Take out your books",
+        "sah-KAHD lohs LEE-brohs"
+      ],
+      [
+        "Sacad las tabletas",
+        "Take out the tablets",
+        "sah-KAHD lahs tah-BLEH-tahs"
+      ],
+      [
+        "Silencio, por favor",
+        "Silence, please",
+        "see-LEHN-see-oh por fah-VOR"
+      ],
+      [
+        "Abrid los libros",
+        "Open the books",
+        "ah-BREED lohs LEE-brohs"
+      ],
+      [
+        "Leed página 2",
+        "Read page 2",
+        "leh-EHD PAH-hee-nah dohs"
+      ],
+      [
+        "Escribid en los cuadernos",
+        "Write in the notebooks",
+        "ehs-kree-BEED ehn lohs kwah-DEHR-nohs"
+      ],
+      [
+        "Repetid",
+        "Repeat",
+        "reh-peh-TEED"
+      ],
+      [
+        "Sentaos",
+        "Sit down",
+        "sehn-TAH-ohs"
+      ],
+      [
+        "Levantaos",
+        "Stand up",
+        "leh-vahn-TAH-ohs"
+      ],
+      [
+        "Trabajad en parejas",
+        "Work in pairs",
+        "trah-bah-HAHD ehn pah-REH-hahs"
+      ],
+      [
+        "Trabajad en grupos",
+        "Work in groups",
+        "trah-bah-HAHD ehn GROO-pohs"
+      ]
+    ]
+  },
+  {
+    "id": "s3",
+    "title": "3. Useful Classroom Phrases",
+    "color": "#2457c5",
+    "bg": "#eef3ff",
+    "phrases": [
+      [
+        "Por favor",
+        "Please",
+        "por FAH-vor"
+      ],
+      [
+        "Gracias",
+        "Thanks",
+        "GRAH-see-ahs"
+      ],
+      [
+        "De nada",
+        "You're welcome",
+        "deh NAH-dah"
+      ],
+      [
+        "No entiendo",
+        "I don't understand",
+        "no ehn-tee-EHN-doh"
+      ],
+      [
+        "¿Qué significa...?",
+        "What does it mean...?",
+        "keh seeg-nee-FEE-kah"
+      ],
+      [
+        "¿Cómo se dice...?",
+        "How do you say...?",
+        "KOH-moh seh DEE-seh"
+      ],
+      [
+        "Necesito un bolígrafo / un diccionario",
+        "I need a pen / a dictionary",
+        "neh-seh-SEE-toh oon boh-LEE-grah-foh / oon deek-see-oh-NAH-ree-oh"
+      ],
+      [
+        "No tengo mi cuaderno",
+        "I don't have my notebook",
+        "no TEN-goh mee kwah-DEHR-noh"
+      ],
+      [
+        "He terminado",
+        "I have finished",
+        "eh tehr-mee-NAH-doh"
+      ],
+      [
+        "¿Puedo ir al baño?",
+        "Can I go to the bathroom?",
+        "PWEH-doh eer ahl BAHN-yoh"
+      ],
+      [
+        "¿Puedo ir a mi taquilla?",
+        "Can I go to my locker?",
+        "PWEH-doh eer ah mee tah-KEE-yah"
+      ],
+      [
+        "Tenemos deberes",
+        "We have homework",
+        "teh-NEH-mohs deh-BEH-rehs"
+      ],
+      [
+        "Profesor / Profesora",
+        "Teacher",
+        "proh-feh-SOR / proh-feh-SOH-rah"
+      ]
+    ]
+  },
+  {
+    "id": "s4",
+    "title": "4. Names & Introductions",
+    "color": "#a4740a",
+    "bg": "#fff8e8",
+    "phrases": [
+      [
+        "¿Qué tal?",
+        "How are you?",
+        "keh TAHL"
+      ],
+      [
+        "Muy bien",
+        "Very well",
+        "mwee BYEHN"
+      ],
+      [
+        "¿Cómo te llamas?",
+        "What's your name?",
+        "KOH-moh teh YAH-mahs"
+      ],
+      [
+        "Me llamo...",
+        "My name is...",
+        "meh YAH-moh"
+      ],
+      [
+        "¿Cuál es tu apellido?",
+        "What's your surname?",
+        "kwahl ehs too ah-peh-YEE-doh"
+      ],
+      [
+        "Mi apellido es...",
+        "My surname is...",
+        "mee ah-peh-YEE-doh ehs"
+      ]
+    ]
+  },
+  {
+    "id": "s5",
+    "title": "5. Los Números — Numbers 1 to 20",
+    "color": "#7a3ba0",
+    "bg": "#f6effa",
+    "phrases": [
+      [
+        "uno",
+        "1 — one",
+        "OO-noh"
+      ],
+      [
+        "dos",
+        "2 — two",
+        "dohs"
+      ],
+      [
+        "tres",
+        "3 — three",
+        "trehs"
+      ],
+      [
+        "cuatro",
+        "4 — four",
+        "KWAH-troh"
+      ],
+      [
+        "cinco",
+        "5 — five",
+        "SEEN-koh"
+      ],
+      [
+        "seis",
+        "6 — six",
+        "says"
+      ],
+      [
+        "siete",
+        "7 — seven",
+        "see-EH-teh"
+      ],
+      [
+        "ocho",
+        "8 — eight",
+        "OH-choh"
+      ],
+      [
+        "nueve",
+        "9 — nine",
+        "NWEH-veh"
+      ],
+      [
+        "diez",
+        "10 — ten",
+        "dee-EHS"
+      ],
+      [
+        "once",
+        "11 — eleven",
+        "OHN-seh"
+      ],
+      [
+        "doce",
+        "12 — twelve",
+        "DOH-seh"
+      ],
+      [
+        "trece",
+        "13 — thirteen",
+        "TREH-seh"
+      ],
+      [
+        "catorce",
+        "14 — fourteen",
+        "kah-TOR-seh"
+      ],
+      [
+        "quince",
+        "15 — fifteen",
+        "KEEN-seh"
+      ],
+      [
+        "dieciséis",
+        "16 — sixteen",
+        "dee-eh-see-SAYS"
+      ],
+      [
+        "diecisiete",
+        "17 — seventeen",
+        "dee-eh-see-see-EH-teh"
+      ],
+      [
+        "dieciocho",
+        "18 — eighteen",
+        "dee-eh-see-OH-choh"
+      ],
+      [
+        "diecinueve",
+        "19 — nineteen",
+        "dee-eh-see-NWEH-veh"
+      ],
+      [
+        "veinte",
+        "20 — twenty",
+        "VAYN-teh"
+      ]
+    ]
+  }
+]
 };
 
 const STORAGE_KEY = "spanish_phrases_data_v1";
@@ -215,7 +516,8 @@ function render() {
     section.phrases.forEach((phrase, idx) => {
       const row = document.createElement('div'); row.className = 'row'; row.style.borderLeftColor = section.color;
       const text = document.createElement('div'); text.className = 'text';
-      text.innerHTML = `<span class="spanish" lang="es">${escapeHtml(phrase[0])}</span><span class="english" lang="en">${escapeHtml(phrase[1])}</span>`;
+      const ph = phrase[2] ? `<span class="phonetic" aria-label="Sounds like">${escapeHtml(phrase[2])}</span>` : '';
+      text.innerHTML = `<span class="spanish" lang="es">${escapeHtml(phrase[0])}</span><span class="english" lang="en">${escapeHtml(phrase[1])}</span>${ph}`;
       row.appendChild(text);
       const actions = document.createElement('div'); actions.className = 'row-actions';
       const listenBtn = document.createElement('button'); listenBtn.className = 'listen-btn'; listenBtn.textContent = '🔊';
@@ -234,13 +536,13 @@ function render() {
       const addTrigger = document.createElement('button'); addTrigger.className = 'add-phrase-trigger';
       addTrigger.textContent = '+ Add a phrase to this section';
       const addForm = document.createElement('div'); addForm.className = 'add-row';
-      addForm.innerHTML = `<input type="text" placeholder="Spanish phrase" class="new-sp"><input type="text" placeholder="English meaning" class="new-en"><div class="btns"><button class="save-btn">Add</button><button class="cancel-btn">Cancel</button></div>`;
+      addForm.innerHTML = `<input type="text" placeholder="Spanish phrase" class="new-sp"><input type="text" placeholder="English meaning" class="new-en"><input type="text" placeholder="Sounds like (optional), e.g. OH-lah" class="new-ph"><div class="btns"><button class="save-btn">Add</button><button class="cancel-btn">Cancel</button></div>`;
       addTrigger.addEventListener('click', () => { addForm.classList.add('open'); addTrigger.style.display = 'none'; });
-      const spInput = addForm.querySelector('.new-sp'), enInput = addForm.querySelector('.new-en');
+      const spInput = addForm.querySelector('.new-sp'), enInput = addForm.querySelector('.new-en'), phInput = addForm.querySelector('.new-ph');
       addForm.querySelector('.save-btn').addEventListener('click', () => {
-        const sp = spInput.value.trim(), en = enInput.value.trim();
+        const sp = spInput.value.trim(), en = enInput.value.trim(), ph = phInput.value.trim();
         if (!sp) { spInput.focus(); return; }
-        section.phrases.push([sp, en]); saveData(); render();
+        section.phrases.push([sp, en, ph]); saveData(); render();
       });
       addForm.querySelector('.cancel-btn').addEventListener('click', () => { addForm.classList.remove('open'); addTrigger.style.display = 'block'; });
       sec.appendChild(addTrigger); sec.appendChild(addForm);
@@ -250,15 +552,17 @@ function render() {
   document.getElementById('addSectionTrigger').style.display = editMode ? 'block' : 'none';
 }
 function editPhrase(section, idx) {
-  const [sp, en] = section.phrases[idx];
+  const [sp, en, ph] = section.phrases[idx];
   const newSp = prompt("Spanish phrase:", sp); if (newSp === null) return;
   const newEn = prompt("English meaning:", en); if (newEn === null) return;
-  section.phrases[idx] = [newSp.trim(), newEn.trim()]; saveData(); render();
+  const newPh = prompt("Sounds like (pronunciation guide):", ph || ''); if (newPh === null) return;
+  section.phrases[idx] = [newSp.trim(), newEn.trim(), newPh.trim()]; saveData(); render();
 }
 function escapeHtml(str) { const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
 
 document.getElementById('slowBtn').addEventListener('click', function() { currentRate = 0.6; this.classList.add('active'); document.getElementById('normalBtn').classList.remove('active'); });
 document.getElementById('normalBtn').addEventListener('click', function() { currentRate = 0.85; this.classList.add('active'); document.getElementById('slowBtn').classList.remove('active'); });
+document.getElementById('phoneticBtn').addEventListener('click', function() { const hidden = document.body.classList.toggle('hide-phonetics'); this.classList.toggle('active', !hidden); });
 document.getElementById('editModeBtn').addEventListener('click', function() { editMode = !editMode; this.classList.toggle('active', editMode); this.textContent = editMode ? '✅ Done editing' : '✏️ Edit words'; render(); });
 document.getElementById('exportBtn').addEventListener('click', () => {
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
