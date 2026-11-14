@@ -28,7 +28,10 @@
   .section-head h2 { font-size:18px; margin:0; flex:1; }
   .icon-btn { border:none; background:transparent; font-size:18px; cursor:pointer; padding:4px 6px; color:#6b6b7d; }
   .top-btn { border:2px solid #4a3b78; background:white; color:#4a3b78; border-radius:8px; padding:6px 10px; font-size:13px; font-weight:600; cursor:pointer; flex-shrink:0; white-space:nowrap; }
+  .play-btn { border:2px solid #4a3b78; background:#4a3b78; color:white; border-radius:8px; padding:6px 10px; font-size:13px; font-weight:600; cursor:pointer; flex-shrink:0; white-space:nowrap; min-width:92px; }
+  .play-btn.playing { background:#b8134f; border-color:#b8134f; }
   .row { background:white; border-radius:10px; padding:10px 12px; margin-bottom:8px; display:flex; align-items:center; justify-content:space-between; gap:8px; border-left:6px solid #ffb703; }
+  .row.now-playing { box-shadow:0 0 0 3px #b8134f; }
   .text { flex:1; min-width:0; }
   .spanish { font-size:17px; font-weight:700; display:block; }
   .english { font-size:13px; color:#4a3b78; font-weight:600; display:block; }
@@ -84,7 +87,9 @@
     </div>
   </div>
   <p class="note">
-    Tap 🔊 to hear a phrase spoken aloud. The "Sounds like" button shows or
+    Tap 🔊 to hear a phrase spoken aloud. Tap "▶ Play all" on a section to
+    hear every phrase in it, first in Spanish and then in English — tap it
+    again to stop. The "Sounds like" button shows or
     hides the pronunciation guide. To add new words from the teacher,
     the phrase list in the file gets updated and redeployed — every iPad
     picks up the new list automatically next time it's opened. You can also
@@ -98,7 +103,7 @@
    and redeploy. This tells every iPad "there's a new version on the
    server" so it replaces its saved copy with this one automatically.
    Each phrase is [spanish, english, soundsLike]. */
-const DATA_VERSION = 17;
+const DATA_VERSION = 18;
 
 const DEFAULT_DATA = {
   version: DATA_VERSION,
@@ -1503,10 +1508,13 @@ let data = loadData();
 let editMode = false;
 let currentRate = 0.85;
 let spanishVoice = null;
+let englishVoice = null;
 
 function pickVoice() {
   const voices = window.speechSynthesis.getVoices();
-  spanishVoice = voices.find(v => v.lang === 'es-ES') || voices.find(v => v.lang && v.lang.startsWith('es')) || null;
+  const lang = v => (v.lang || '').replace('_', '-');
+  spanishVoice = voices.find(v => lang(v) === 'es-ES') || voices.find(v => lang(v).startsWith('es')) || null;
+  englishVoice = voices.find(v => lang(v) === 'en-IE') || voices.find(v => lang(v) === 'en-GB') || voices.find(v => lang(v).startsWith('en')) || null;
 }
 if (!('speechSynthesis' in window)) {
   document.getElementById('noSupport').style.display = 'block';
@@ -1516,6 +1524,7 @@ if (!('speechSynthesis' in window)) {
 }
 function speak(text, btn) {
   if (!('speechSynthesis' in window)) return;
+  stopPlayAll();
   window.speechSynthesis.cancel();
   const utter = new SpeechSynthesisUtterance(text.replace(/\.\.\./g, ''));
   utter.lang = 'es-ES';
@@ -1526,6 +1535,93 @@ function speak(text, btn) {
   utter.onend = () => btn && btn.classList.remove('playing');
   utter.onerror = () => btn && btn.classList.remove('playing');
   window.speechSynthesis.speak(utter);
+}
+
+/* ---------- Play all ----------
+   Goes through one section: Spanish, short pause, English, short pause,
+   next phrase. Change PAUSE_MS to make the gaps longer or shorter. */
+const PAUSE_MS = 1200;
+const ENGLISH_RATE = 0.9;
+let playAll = null;       // the run in progress: { token, btn, row, timer }
+let currentUtter = null;  // kept so Safari doesn't drop the utterance mid-speech
+let wakeLock = null;
+
+/* Tidy a phrase for reading aloud: "1 — one" -> "one", "a / b" -> "a, b" */
+function speechText(text) {
+  return (text || '')
+    .replace(/^\d+\s*—\s*/, '')
+    .replace(/\(m\. \/ f\.\)/g, '(masculine or feminine)')
+    .replace(/\.\.\./g, ' ')
+    .replace(/\s+\/\s+/g, ', ')
+    .trim();
+}
+function keepAwake() {
+  try {
+    if (navigator.wakeLock) navigator.wakeLock.request('screen').then(l => { if (playAll) wakeLock = l; else l.release(); }).catch(() => {});
+  } catch (e) {}
+}
+function letSleep() {
+  try { if (wakeLock) wakeLock.release(); } catch (e) {}
+  wakeLock = null;
+}
+function sayThen(text, lang, voice, rate, token, next) {
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = lang; u.rate = rate;
+  if (voice) u.voice = voice;
+  let done = false, guard = null;
+  const finish = (ok) => {
+    if (done) return;
+    done = true; clearTimeout(guard);
+    if (!playAll || playAll.token !== token) return;
+    if (ok) next(); else stopPlayAll();
+  };
+  u.onend = () => finish(true);
+  u.onerror = () => finish(false);
+  // Safety net: Safari occasionally never reports the end of an utterance.
+  guard = setTimeout(() => finish(true), 5000 + text.length * 250);
+  currentUtter = u;
+  window.speechSynthesis.speak(u);
+}
+function pauseThen(token, fn) {
+  playAll.timer = setTimeout(() => { if (playAll && playAll.token === token) fn(); }, PAUSE_MS);
+}
+function stopPlayAll() {
+  if (!playAll) return;
+  const p = playAll; playAll = null;
+  clearTimeout(p.timer);
+  p.btn.textContent = '▶ Play all'; p.btn.classList.remove('playing');
+  if (p.row) p.row.classList.remove('now-playing');
+  window.speechSynthesis.cancel();
+  letSleep();
+}
+function togglePlayAll(section, secEl, btn) {
+  if (!('speechSynthesis' in window)) return;
+  const wasThisOne = playAll && playAll.btn === btn;
+  stopPlayAll();
+  if (wasThisOne || section.phrases.length === 0) return;
+  window.speechSynthesis.cancel();
+  document.querySelectorAll('.listen-btn.playing').forEach(b => b.classList.remove('playing'));
+  const rows = secEl.querySelectorAll('.row');
+  const token = {};
+  playAll = { token, btn, row: null, timer: null };
+  btn.textContent = '⏹ Stop'; btn.classList.add('playing');
+  keepAwake();
+  let i = 0;
+  const step = () => {
+    if (i >= section.phrases.length) { stopPlayAll(); return; }
+    const phrase = section.phrases[i];
+    if (playAll.row) playAll.row.classList.remove('now-playing');
+    playAll.row = rows[i] || null;
+    if (playAll.row) { playAll.row.classList.add('now-playing'); playAll.row.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    const nextPhrase = () => pauseThen(token, () => { i++; step(); });
+    const english = speechText(phrase[1]);
+    const enLang = englishVoice ? englishVoice.lang.replace('_', '-') : 'en-GB';
+    sayThen(speechText(phrase[0]), 'es-ES', spanishVoice, currentRate, token, () => {
+      if (!english) { nextPhrase(); return; }
+      pauseThen(token, () => sayThen(english, enLang, englishVoice, ENGLISH_RATE, token, nextPhrase));
+    });
+  };
+  step();
 }
 
 function jumpTo(el) { if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
@@ -1546,6 +1642,7 @@ function renderMenu() {
 }
 
 function render() {
+  stopPlayAll();
   renderMenu();
   const container = document.getElementById('sections');
   container.innerHTML = '';
@@ -1567,6 +1664,13 @@ function render() {
         }
       });
       head.appendChild(delSecBtn);
+    }
+    if (section.phrases.length > 0) {
+      const playBtn = document.createElement('button');
+      playBtn.className = 'play-btn'; playBtn.textContent = '▶ Play all';
+      playBtn.setAttribute('aria-label', 'Play every phrase in this section, in Spanish then English');
+      playBtn.addEventListener('click', () => togglePlayAll(section, sec, playBtn));
+      head.appendChild(playBtn);
     }
     const topBtn = document.createElement('button');
     topBtn.className = 'top-btn'; topBtn.textContent = '⬆ Menu';
