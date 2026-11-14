@@ -17,6 +17,13 @@
   .toolbar { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:16px; }
   .toolbar button { border:2px solid #4a3b78; background:white; color:#4a3b78; border-radius:8px; padding:8px 14px; font-size:14px; font-weight:600; cursor:pointer; }
   .toolbar button.active { background:#4a3b78; color:white; }
+  .voice-panel { display:none; background:white; border:2px solid #4a3b78; border-radius:14px; padding:12px 14px 8px 14px; margin-bottom:16px; }
+  .voice-panel.open { display:block; }
+  .voice-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+  .voice-row label { font-size:14px; font-weight:600; color:#4a3b78; width:108px; flex-shrink:0; }
+  .voice-row select { flex:1; min-width:0; font-size:16px; padding:8px; border:1px solid #bbb; border-radius:8px; background:white; color:#1a1a2e; }
+  .test-btn { border:2px solid #4a3b78; background:white; color:#4a3b78; border-radius:8px; padding:8px 10px; font-size:13px; font-weight:600; cursor:pointer; flex-shrink:0; white-space:nowrap; }
+  .voice-hint { font-size:12px; color:#6b6b7d; margin:2px 0 6px 0; line-height:1.4; }
   .menu { background:white; border:2px solid #4a3b78; border-radius:14px; padding:12px 14px 8px 14px; margin-bottom:20px; scroll-margin-top:12px; }
   .menu h2 { font-size:17px; margin:0 0 8px 0; color:#4a3b78; }
   .menu ol { list-style:none; margin:0; padding:0; }
@@ -66,10 +73,24 @@
     <button data-rate="0.6" id="slowBtn">Slow speed</button>
     <button data-rate="0.85" id="normalBtn" class="active">Normal speed</button>
     <button id="phoneticBtn" class="active">🔤 Sounds like</button>
+    <button id="voicesBtn">🗣️ Voices</button>
     <button id="editModeBtn">✏️ Edit words</button>
     <button id="exportBtn">⬇️ Backup</button>
     <button id="importBtn">⬆️ Restore</button>
     <input type="file" id="importFile" accept="application/json" style="display:none">
+  </div>
+  <div class="voice-panel" id="voicePanel">
+    <div class="voice-row">
+      <label for="esVoice">Spanish voice</label>
+      <select id="esVoice"></select>
+      <button class="test-btn" id="esTest" aria-label="Test the Spanish voice">▶ Test</button>
+    </div>
+    <div class="voice-row">
+      <label for="enVoice">English voice</label>
+      <select id="enVoice"></select>
+      <button class="test-btn" id="enTest" aria-label="Test the English voice">▶ Test</button>
+    </div>
+    <p class="voice-hint">Picking a voice plays a short sample. The choice is remembered on this device only, so each device can have its own. If a voice sounds wrong or stays silent, try another.</p>
   </div>
   <nav class="menu" id="menu" aria-label="Sections">
     <h2>📋 Jump to a section</h2>
@@ -89,7 +110,8 @@
   <p class="note">
     Tap 🔊 to hear a phrase spoken aloud. Tap "▶ Play all" on a section to
     hear every phrase in it, first in Spanish and then in English — tap it
-    again to stop. The "Sounds like" button shows or
+    again to stop. If a voice doesn't sound right on this device, tap
+    "Voices" to choose a different one. The "Sounds like" button shows or
     hides the pronunciation guide. To add new words from the teacher,
     the phrase list in the file gets updated and redeployed — every iPad
     picks up the new list automatically next time it's opened. You can also
@@ -103,7 +125,7 @@
    and redeploy. This tells every iPad "there's a new version on the
    server" so it replaces its saved copy with this one automatically.
    Each phrase is [spanish, english, soundsLike]. */
-const DATA_VERSION = 18;
+const DATA_VERSION = 19;
 
 const DEFAULT_DATA = {
   version: DATA_VERSION,
@@ -455,7 +477,70 @@ const DEFAULT_DATA = {
   },
   {
     "id": "s6",
-    "title": "6. Los Pronombres — Subject Pronouns",
+    "title": "6. Los Números — Numbers 21 to 31",
+    "color": "#b91c1c",
+    "bg": "#fef2f2",
+    "phrases": [
+      [
+        "veintiuno / veintiuna",
+        "21 — twenty-one",
+        "vayn-tee-OO-noh / vayn-tee-OO-nah"
+      ],
+      [
+        "veintidós",
+        "22 — twenty-two",
+        "vayn-tee-DOHS"
+      ],
+      [
+        "veintitrés",
+        "23 — twenty-three",
+        "vayn-tee-TREHS"
+      ],
+      [
+        "veinticuatro",
+        "24 — twenty-four",
+        "vayn-tee-KWAH-troh"
+      ],
+      [
+        "veinticinco",
+        "25 — twenty-five",
+        "vayn-tee-SEEN-koh"
+      ],
+      [
+        "veintiséis",
+        "26 — twenty-six",
+        "vayn-tee-SAYS"
+      ],
+      [
+        "veintisiete",
+        "27 — twenty-seven",
+        "vayn-tee-see-EH-teh"
+      ],
+      [
+        "veintiocho",
+        "28 — twenty-eight",
+        "vayn-tee-OH-choh"
+      ],
+      [
+        "veintinueve",
+        "29 — twenty-nine",
+        "vayn-tee-NWEH-veh"
+      ],
+      [
+        "treinta",
+        "30 — thirty",
+        "TRAYN-tah"
+      ],
+      [
+        "treinta y uno / treinta y una",
+        "31 — thirty-one",
+        "TRAYN-tah ee OO-noh / TRAYN-tah ee OO-nah"
+      ]
+    ]
+  },
+  {
+    "id": "s7",
+    "title": "7. Los Pronombres — Subject Pronouns",
     "color": "#1f8a8a",
     "bg": "#e9fafa",
     "phrases": [
@@ -492,8 +577,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s7",
-    "title": "7. El Verbo Tener — To Have",
+    "id": "s8",
+    "title": "8. El Verbo Tener — To Have",
     "color": "#c2410c",
     "bg": "#fff1ea",
     "phrases": [
@@ -530,8 +615,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s8",
-    "title": "8. Tengo... & El Verbo Estar — To Be",
+    "id": "s9",
+    "title": "9. Tengo... & El Verbo Estar — To Be",
     "color": "#4d6608",
     "bg": "#f6f9e6",
     "phrases": [
@@ -608,8 +693,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s9",
-    "title": "9. Decir Cómo Estás — Saying How You Are",
+    "id": "s10",
+    "title": "10. Decir Cómo Estás — Saying How You Are",
     "color": "#3b5bdb",
     "bg": "#eef1fe",
     "phrases": [
@@ -676,8 +761,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s10",
-    "title": "10. El Aula — Classroom Objects",
+    "id": "s11",
+    "title": "11. El Aula — Classroom Objects",
     "color": "#a21caf",
     "bg": "#fdf2fe",
     "phrases": [
@@ -849,8 +934,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s11",
-    "title": "11. Los Días de la Semana — Days of the Week",
+    "id": "s12",
+    "title": "12. Los Días de la Semana — Days of the Week",
     "color": "#0369a1",
     "bg": "#eaf6fd",
     "phrases": [
@@ -927,8 +1012,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s12",
-    "title": "12. Las Asignaturas — School Subjects",
+    "id": "s13",
+    "title": "13. Las Asignaturas — School Subjects",
     "color": "#9a4f12",
     "bg": "#fdf4ec",
     "phrases": [
@@ -1070,8 +1155,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s13",
-    "title": "13. Mis Opiniones — What I Think of My Subjects",
+    "id": "s14",
+    "title": "14. Mis Opiniones — What I Think of My Subjects",
     "color": "#be123c",
     "bg": "#fff0f3",
     "phrases": [
@@ -1193,8 +1278,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s14",
-    "title": "14. Las Vacaciones — Holidays",
+    "id": "s15",
+    "title": "15. Las Vacaciones — Holidays",
     "color": "#0f766e",
     "bg": "#ecfdf9",
     "phrases": [
@@ -1221,8 +1306,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s15",
-    "title": "15. El Verbo Ir — To Go",
+    "id": "s16",
+    "title": "16. El Verbo Ir — To Go",
     "color": "#5b21b6",
     "bg": "#f5f0ff",
     "phrases": [
@@ -1274,8 +1359,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s16",
-    "title": "16. Los Meses del Año — Months of the Year",
+    "id": "s17",
+    "title": "17. Los Meses del Año — Months of the Year",
     "color": "#15803d",
     "bg": "#effaf2",
     "phrases": [
@@ -1347,69 +1432,6 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s17",
-    "title": "17. Los Números — Numbers 21 to 31",
-    "color": "#b91c1c",
-    "bg": "#fef2f2",
-    "phrases": [
-      [
-        "veintiuno / veintiuna",
-        "21 — twenty-one",
-        "vayn-tee-OO-noh / vayn-tee-OO-nah"
-      ],
-      [
-        "veintidós",
-        "22 — twenty-two",
-        "vayn-tee-DOHS"
-      ],
-      [
-        "veintitrés",
-        "23 — twenty-three",
-        "vayn-tee-TREHS"
-      ],
-      [
-        "veinticuatro",
-        "24 — twenty-four",
-        "vayn-tee-KWAH-troh"
-      ],
-      [
-        "veinticinco",
-        "25 — twenty-five",
-        "vayn-tee-SEEN-koh"
-      ],
-      [
-        "veintiséis",
-        "26 — twenty-six",
-        "vayn-tee-SAYS"
-      ],
-      [
-        "veintisiete",
-        "27 — twenty-seven",
-        "vayn-tee-see-EH-teh"
-      ],
-      [
-        "veintiocho",
-        "28 — twenty-eight",
-        "vayn-tee-OH-choh"
-      ],
-      [
-        "veintinueve",
-        "29 — twenty-nine",
-        "vayn-tee-NWEH-veh"
-      ],
-      [
-        "treinta",
-        "30 — thirty",
-        "TRAYN-tah"
-      ],
-      [
-        "treinta y uno / treinta y una",
-        "31 — thirty-one",
-        "TRAYN-tah ee OO-noh / TRAYN-tah ee OO-nah"
-      ]
-    ]
-  },
-  {
     "id": "s18",
     "title": "18. Los Colores — Colours",
     "color": "#0e7490",
@@ -1419,51 +1441,6 @@ const DEFAULT_DATA = {
         "los colores",
         "the colours",
         "lohs koh-LOH-rehs"
-      ],
-      [
-        "blanco",
-        "white",
-        "BLAHN-koh"
-      ],
-      [
-        "morado",
-        "purple",
-        "moh-RAH-doh"
-      ],
-      [
-        "azul",
-        "blue",
-        "ah-SOOL"
-      ],
-      [
-        "verde",
-        "green",
-        "VEHR-deh"
-      ],
-      [
-        "gris",
-        "grey",
-        "GREES"
-      ],
-      [
-        "marrón",
-        "brown",
-        "mah-RROHN"
-      ],
-      [
-        "negro",
-        "black",
-        "NEH-groh"
-      ],
-      [
-        "amarillo",
-        "yellow",
-        "ah-mah-REE-yoh"
-      ],
-      [
-        "rosa",
-        "pink",
-        "ROH-sah"
       ],
       [
         "rojo",
@@ -1476,9 +1453,54 @@ const DEFAULT_DATA = {
         "nah-RAHN-hah"
       ],
       [
+        "amarillo",
+        "yellow",
+        "ah-mah-REE-yoh"
+      ],
+      [
+        "verde",
+        "green",
+        "VEHR-deh"
+      ],
+      [
+        "azul",
+        "blue",
+        "ah-SOOL"
+      ],
+      [
         "azul marino",
         "navy blue",
         "ah-SOOL mah-REE-noh"
+      ],
+      [
+        "morado",
+        "purple",
+        "moh-RAH-doh"
+      ],
+      [
+        "rosa",
+        "pink",
+        "ROH-sah"
+      ],
+      [
+        "marrón",
+        "brown",
+        "mah-RROHN"
+      ],
+      [
+        "gris",
+        "grey",
+        "GREES"
+      ],
+      [
+        "blanco",
+        "white",
+        "BLAHN-koh"
+      ],
+      [
+        "negro",
+        "black",
+        "NEH-groh"
       ]
     ]
   }
@@ -1510,11 +1532,60 @@ let currentRate = 0.85;
 let spanishVoice = null;
 let englishVoice = null;
 
+/* ---------- Voices ----------
+   Every device has its own set of voices, so the choice is saved on the
+   device, separately from the word list (it survives DATA_VERSION bumps).
+   "Automatic" = Spain Spanish, and Irish then British English, if present. */
+const VOICE_KEY = "spanish_phrases_voices_v1";
+const ENGLISH_RATE = 1.0;    // a touch quicker and higher than before,
+const ENGLISH_PITCH = 1.15;  // so the English sounds less flat
+let voiceChoice = { es: '', en: '' };
+try { Object.assign(voiceChoice, JSON.parse(localStorage.getItem(VOICE_KEY) || '{}')); } catch (e) {}
+const vLang = v => (v.lang || '').replace('_', '-');
+const vId = v => v.voiceURI || v.name;
+function voicesFor(prefix, preferred) {
+  const rank = v => { const i = preferred.indexOf(vLang(v)); return i < 0 ? preferred.length : i; };
+  return window.speechSynthesis.getVoices()
+    .filter(v => vLang(v).toLowerCase().startsWith(prefix))
+    .sort((a, b) => rank(a) - rank(b) || vLang(a).localeCompare(vLang(b)));
+}
+function fillVoiceSelect(id, list, chosen) {
+  const sel = document.getElementById(id);
+  sel.innerHTML = '';
+  const auto = document.createElement('option');
+  auto.value = ''; auto.textContent = list.length ? 'Automatic (' + list[0].name + ')' : 'Automatic';
+  sel.appendChild(auto);
+  list.forEach(v => { const o = document.createElement('option'); o.value = vId(v); o.textContent = v.name + ' — ' + vLang(v); sel.appendChild(o); });
+  sel.value = list.some(v => vId(v) === chosen) ? chosen : '';
+}
 function pickVoice() {
-  const voices = window.speechSynthesis.getVoices();
-  const lang = v => (v.lang || '').replace('_', '-');
-  spanishVoice = voices.find(v => lang(v) === 'es-ES') || voices.find(v => lang(v).startsWith('es')) || null;
-  englishVoice = voices.find(v => lang(v) === 'en-IE') || voices.find(v => lang(v) === 'en-GB') || voices.find(v => lang(v).startsWith('en')) || null;
+  const es = voicesFor('es', ['es-ES']), en = voicesFor('en', ['en-IE', 'en-GB']);
+  spanishVoice = es.find(v => vId(v) === voiceChoice.es) || es[0] || null;
+  englishVoice = en.find(v => vId(v) === voiceChoice.en) || en[0] || null;
+  fillVoiceSelect('esVoice', es, voiceChoice.es);
+  fillVoiceSelect('enVoice', en, voiceChoice.en);
+}
+function makeUtter(text, which) {
+  const u = new SpeechSynthesisUtterance(text);
+  const voice = which === 'en' ? englishVoice : spanishVoice;
+  u.lang = voice ? vLang(voice) : (which === 'en' ? 'en-GB' : 'es-ES');
+  if (voice) u.voice = voice;
+  if (which === 'en') { u.rate = ENGLISH_RATE; u.pitch = ENGLISH_PITCH; } else { u.rate = currentRate; }
+  return u;
+}
+function testVoice(which) {
+  if (!('speechSynthesis' in window)) return;
+  stopPlayAll();
+  window.speechSynthesis.cancel();
+  document.querySelectorAll('.listen-btn.playing').forEach(b => b.classList.remove('playing'));
+  currentUtter = makeUtter(which === 'en' ? 'Hello! This is the English voice.' : 'Hola, buenos días. ¿Qué tal?', which);
+  window.speechSynthesis.speak(currentUtter);
+}
+function chooseVoice(which, id) {
+  voiceChoice[which] = id;
+  try { localStorage.setItem(VOICE_KEY, JSON.stringify(voiceChoice)); } catch (e) {}
+  pickVoice();
+  testVoice(which);
 }
 if (!('speechSynthesis' in window)) {
   document.getElementById('noSupport').style.display = 'block';
@@ -1526,10 +1597,7 @@ function speak(text, btn) {
   if (!('speechSynthesis' in window)) return;
   stopPlayAll();
   window.speechSynthesis.cancel();
-  const utter = new SpeechSynthesisUtterance(text.replace(/\.\.\./g, ''));
-  utter.lang = 'es-ES';
-  utter.rate = currentRate;
-  if (spanishVoice) utter.voice = spanishVoice;
+  const utter = makeUtter(text.replace(/\.\.\./g, ''), 'es');
   document.querySelectorAll('.listen-btn.playing').forEach(b => b.classList.remove('playing'));
   if (btn) btn.classList.add('playing');
   utter.onend = () => btn && btn.classList.remove('playing');
@@ -1541,7 +1609,6 @@ function speak(text, btn) {
    Goes through one section: Spanish, short pause, English, short pause,
    next phrase. Change PAUSE_MS to make the gaps longer or shorter. */
 const PAUSE_MS = 1200;
-const ENGLISH_RATE = 0.9;
 let playAll = null;       // the run in progress: { token, btn, row, timer }
 let currentUtter = null;  // kept so Safari doesn't drop the utterance mid-speech
 let wakeLock = null;
@@ -1564,10 +1631,8 @@ function letSleep() {
   try { if (wakeLock) wakeLock.release(); } catch (e) {}
   wakeLock = null;
 }
-function sayThen(text, lang, voice, rate, token, next) {
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = lang; u.rate = rate;
-  if (voice) u.voice = voice;
+function sayThen(text, which, token, next) {
+  const u = makeUtter(text, which);
   let done = false, guard = null;
   const finish = (ok) => {
     if (done) return;
@@ -1615,10 +1680,9 @@ function togglePlayAll(section, secEl, btn) {
     if (playAll.row) { playAll.row.classList.add('now-playing'); playAll.row.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
     const nextPhrase = () => pauseThen(token, () => { i++; step(); });
     const english = speechText(phrase[1]);
-    const enLang = englishVoice ? englishVoice.lang.replace('_', '-') : 'en-GB';
-    sayThen(speechText(phrase[0]), 'es-ES', spanishVoice, currentRate, token, () => {
+    sayThen(speechText(phrase[0]), 'es', token, () => {
       if (!english) { nextPhrase(); return; }
-      pauseThen(token, () => sayThen(english, enLang, englishVoice, ENGLISH_RATE, token, nextPhrase));
+      pauseThen(token, () => sayThen(english, 'en', token, nextPhrase));
     });
   };
   step();
@@ -1732,6 +1796,11 @@ function escapeHtml(str) { const d = document.createElement('div'); d.textConten
 document.getElementById('slowBtn').addEventListener('click', function() { currentRate = 0.6; this.classList.add('active'); document.getElementById('normalBtn').classList.remove('active'); });
 document.getElementById('normalBtn').addEventListener('click', function() { currentRate = 0.85; this.classList.add('active'); document.getElementById('slowBtn').classList.remove('active'); });
 document.getElementById('phoneticBtn').addEventListener('click', function() { const hidden = document.body.classList.toggle('hide-phonetics'); this.classList.toggle('active', !hidden); });
+document.getElementById('voicesBtn').addEventListener('click', function() { const open = document.getElementById('voicePanel').classList.toggle('open'); this.classList.toggle('active', open); });
+document.getElementById('esVoice').addEventListener('change', function() { chooseVoice('es', this.value); });
+document.getElementById('enVoice').addEventListener('change', function() { chooseVoice('en', this.value); });
+document.getElementById('esTest').addEventListener('click', () => testVoice('es'));
+document.getElementById('enTest').addEventListener('click', () => testVoice('en'));
 document.getElementById('editModeBtn').addEventListener('click', function() { editMode = !editMode; this.classList.toggle('active', editMode); this.textContent = editMode ? '✅ Done editing' : '✏️ Edit words'; render(); });
 document.getElementById('exportBtn').addEventListener('click', () => {
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
