@@ -17,6 +17,9 @@
   .toolbar { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:16px; }
   .toolbar button { border:2px solid #4a3b78; background:white; color:#4a3b78; border-radius:8px; padding:8px 14px; font-size:14px; font-weight:600; cursor:pointer; }
   .toolbar button.active { background:#4a3b78; color:white; }
+  .play-everything-wrap { min-height:50px; margin-bottom:16px; }
+  .play-everything { display:block; width:100%; border:2px solid #b8134f; background:#b8134f; color:white; border-radius:12px; padding:12px 16px; font-size:17px; font-weight:700; cursor:pointer; }
+  .play-everything.playing { position:fixed; left:50%; transform:translateX(-50%); bottom:max(16px, env(safe-area-inset-bottom)); width:auto; max-width:calc(100% - 28px); white-space:nowrap; z-index:20; background:#4a3b78; border-color:#4a3b78; box-shadow:0 4px 16px rgba(0,0,0,0.3); }
   .voice-panel { display:none; background:white; border:2px solid #4a3b78; border-radius:14px; padding:12px 14px 8px 14px; margin-bottom:16px; }
   .voice-panel.open { display:block; }
   .voice-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
@@ -92,6 +95,9 @@
     </div>
     <p class="voice-hint">Picking a voice plays a short sample. The choice is remembered on this device only, so each device can have its own. If a voice sounds wrong or stays silent, try another.</p>
   </div>
+  <div class="play-everything-wrap">
+    <button class="play-everything" id="playEverythingBtn" aria-label="Play every phrase in every section, in Spanish then English">▶ Play all sections</button>
+  </div>
   <nav class="menu" id="menu" aria-label="Sections">
     <h2>📋 Jump to a section</h2>
     <ol id="menuList"></ol>
@@ -99,7 +105,7 @@
   <div id="sections"></div>
   <button class="add-phrase-trigger" id="addSectionTrigger" style="display:none;">+ Add a new section (e.g. for today's words)</button>
   <div class="new-section-form" id="newSectionForm">
-    <input type="text" id="newSectionTitle" placeholder="Section title, e.g. 13. Miércoles 22 de octubre">
+    <input type="text" id="newSectionTitle" placeholder="Section title, e.g. 22. Miércoles 25 de noviembre">
     <div class="add-row" style="display:block;">
       <div class="btns">
         <button class="save-btn" id="saveSectionBtn">Add section</button>
@@ -110,7 +116,9 @@
   <p class="note">
     Tap 🔊 to hear a phrase spoken aloud. Tap "▶ Play all" on a section to
     hear every phrase in it, first in Spanish and then in English — tap it
-    again to stop. If a voice doesn't sound right on this device, tap
+    again to stop. "▶ Play all sections" at the top does the same for the
+    whole list, start to finish, with a stop button that stays on screen.
+    If a voice doesn't sound right on this device, tap
     "Voices" to choose a different one. The "Sounds like" button shows or
     hides the pronunciation guide. To add new words from the teacher,
     the phrase list in the file gets updated and redeployed — every iPad
@@ -125,7 +133,7 @@
    and redeploy. This tells every iPad "there's a new version on the
    server" so it replaces its saved copy with this one automatically.
    Each phrase is [spanish, english, soundsLike]. */
-const DATA_VERSION = 20;
+const DATA_VERSION = 21;
 
 const DEFAULT_DATA = {
   version: DATA_VERSION,
@@ -1631,6 +1639,117 @@ const DEFAULT_DATA = {
         "TEHN-goh ehl PEH-loh moh-REH-noh ee LEE-soh"
       ]
     ]
+  },
+  {
+    "id": "s20",
+    "title": "20. ¿Cómo Vas al Colegio? — Getting to School",
+    "color": "#4338ca",
+    "bg": "#eef2ff",
+    "phrases": [
+      [
+        "¿Cómo vas al colegio?",
+        "How do you go to school?",
+        "KOH-moh VAHS ahl koh-LEH-hee-oh"
+      ],
+      [
+        "Yo voy al colegio...",
+        "I go to school...",
+        "yoh VOY ahl koh-LEH-hee-oh"
+      ],
+      [
+        "a pie",
+        "on foot",
+        "ah pee-EH"
+      ],
+      [
+        "en bicicleta",
+        "by bike",
+        "ehn bee-see-KLEH-tah"
+      ],
+      [
+        "en coche",
+        "by car",
+        "ehn KOH-cheh"
+      ],
+      [
+        "en autobús",
+        "by bus",
+        "ehn ow-toh-BOOS"
+      ],
+      [
+        "en tren",
+        "by train",
+        "ehn TREHN"
+      ],
+      [
+        "Yo voy al colegio en autobús",
+        "I go to school by bus",
+        "yoh VOY ahl koh-LEH-hee-oh ehn ow-toh-BOOS"
+      ]
+    ]
+  },
+  {
+    "id": "s21",
+    "title": "21. Los Números — Numbers 32 to 99",
+    "color": "#a16207",
+    "bg": "#fefce8",
+    "phrases": [
+      [
+        "cuarenta",
+        "40 — forty",
+        "kwah-REHN-tah"
+      ],
+      [
+        "cincuenta",
+        "50 — fifty",
+        "seen-KWEHN-tah"
+      ],
+      [
+        "sesenta",
+        "60 — sixty",
+        "seh-SEHN-tah"
+      ],
+      [
+        "setenta",
+        "70 — seventy",
+        "seh-TEHN-tah"
+      ],
+      [
+        "ochenta",
+        "80 — eighty",
+        "oh-CHEHN-tah"
+      ],
+      [
+        "noventa",
+        "90 — ninety",
+        "noh-VEHN-tah"
+      ],
+      [
+        "y",
+        "and (the tens, then y, then the number)",
+        "ee"
+      ],
+      [
+        "treinta y dos",
+        "32 — thirty-two",
+        "TRAYN-tah ee DOHS"
+      ],
+      [
+        "cuarenta y cinco",
+        "45 — forty-five",
+        "kwah-REHN-tah ee SEEN-koh"
+      ],
+      [
+        "sesenta y ocho",
+        "68 — sixty-eight",
+        "seh-SEHN-tah ee OH-choh"
+      ],
+      [
+        "noventa y nueve",
+        "99 — ninety-nine",
+        "noh-VEHN-tah ee NWEH-veh"
+      ]
+    ]
   }
 ]
 };
@@ -1734,10 +1853,13 @@ function speak(text, btn) {
 }
 
 /* ---------- Play all ----------
-   Goes through one section: Spanish, short pause, English, short pause,
-   next phrase. Change PAUSE_MS to make the gaps longer or shorter. */
+   Goes through a list of phrases: Spanish, short pause, English, short
+   pause, next phrase. Used both by each section's "▶ Play all" and by
+   "▶ Play all sections" at the top (which leaves a longer gap between
+   sections). Change PAUSE_MS to make the gaps longer or shorter. */
 const PAUSE_MS = 1200;
-let playAll = null;       // the run in progress: { token, btn, row, timer }
+const SECTION_GAP_MS = 2500;
+let playAll = null;       // the run in progress: { token, btn, label, row, timer }
 let currentUtter = null;  // kept so Safari doesn't drop the utterance mid-speech
 let wakeLock = null;
 
@@ -1775,45 +1897,60 @@ function sayThen(text, which, token, next) {
   currentUtter = u;
   window.speechSynthesis.speak(u);
 }
-function pauseThen(token, fn) {
-  playAll.timer = setTimeout(() => { if (playAll && playAll.token === token) fn(); }, PAUSE_MS);
+function pauseThen(token, fn, ms) {
+  playAll.timer = setTimeout(() => { if (playAll && playAll.token === token) fn(); }, ms || PAUSE_MS);
 }
 function stopPlayAll() {
   if (!playAll) return;
   const p = playAll; playAll = null;
   clearTimeout(p.timer);
-  p.btn.textContent = '▶ Play all'; p.btn.classList.remove('playing');
+  p.btn.textContent = p.label; p.btn.classList.remove('playing');
   if (p.row) p.row.classList.remove('now-playing');
   window.speechSynthesis.cancel();
   letSleep();
 }
-function togglePlayAll(section, secEl, btn) {
+/* items: [{ phrase, row, sec }]. status(item) gives the button text while playing. */
+function runPlayAll(btn, label, items, status) {
   if (!('speechSynthesis' in window)) return;
   const wasThisOne = playAll && playAll.btn === btn;
   stopPlayAll();
-  if (wasThisOne || section.phrases.length === 0) return;
+  if (wasThisOne || items.length === 0) return;
   window.speechSynthesis.cancel();
   document.querySelectorAll('.listen-btn.playing').forEach(b => b.classList.remove('playing'));
-  const rows = secEl.querySelectorAll('.row');
   const token = {};
-  playAll = { token, btn, row: null, timer: null };
-  btn.textContent = '⏹ Stop'; btn.classList.add('playing');
+  playAll = { token, btn, label, row: null, timer: null };
+  btn.classList.add('playing');
   keepAwake();
   let i = 0;
   const step = () => {
-    if (i >= section.phrases.length) { stopPlayAll(); return; }
-    const phrase = section.phrases[i];
+    if (i >= items.length) { stopPlayAll(); return; }
+    const item = items[i];
+    btn.textContent = status ? status(item) : '⏹ Stop';
     if (playAll.row) playAll.row.classList.remove('now-playing');
-    playAll.row = rows[i] || null;
+    playAll.row = item.row || null;
     if (playAll.row) { playAll.row.classList.add('now-playing'); playAll.row.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-    const nextPhrase = () => pauseThen(token, () => { i++; step(); });
-    const english = speechText(phrase[1]);
-    sayThen(speechText(phrase[0]), 'es', token, () => {
+    const after = items[i + 1];
+    const gap = after && after.sec !== item.sec ? SECTION_GAP_MS : PAUSE_MS;
+    const nextPhrase = () => pauseThen(token, () => { i++; step(); }, gap);
+    const english = speechText(item.phrase[1]);
+    sayThen(speechText(item.phrase[0]), 'es', token, () => {
       if (!english) { nextPhrase(); return; }
       pauseThen(token, () => sayThen(english, 'en', token, nextPhrase));
     });
   };
   step();
+}
+function sectionItems(section, secIdx, secEl) {
+  const rows = secEl ? secEl.querySelectorAll('.row') : [];
+  return section.phrases.map((phrase, j) => ({ phrase, row: rows[j] || null, sec: secIdx }));
+}
+function togglePlayAll(section, secEl, btn) {
+  runPlayAll(btn, '▶ Play all', sectionItems(section, data.sections.indexOf(section), secEl));
+}
+function togglePlayEverything(btn) {
+  const total = data.sections.length;
+  const items = data.sections.flatMap((s, si) => sectionItems(s, si, document.getElementById('sec-' + s.id)));
+  runPlayAll(btn, '▶ Play all sections', items, it => '⏹ Stop · section ' + (it.sec + 1) + ' of ' + total);
 }
 
 function jumpTo(el) { if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
@@ -1921,6 +2058,7 @@ function editPhrase(section, idx) {
 }
 function escapeHtml(str) { const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
 
+document.getElementById('playEverythingBtn').addEventListener('click', function() { togglePlayEverything(this); });
 document.getElementById('slowBtn').addEventListener('click', function() { currentRate = 0.6; this.classList.add('active'); document.getElementById('normalBtn').classList.remove('active'); });
 document.getElementById('normalBtn').addEventListener('click', function() { currentRate = 0.85; this.classList.add('active'); document.getElementById('slowBtn').classList.remove('active'); });
 document.getElementById('phoneticBtn').addEventListener('click', function() { const hidden = document.body.classList.toggle('hide-phonetics'); this.classList.toggle('active', !hidden); });
