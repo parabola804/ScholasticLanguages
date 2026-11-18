@@ -105,7 +105,7 @@
   <div id="sections"></div>
   <button class="add-phrase-trigger" id="addSectionTrigger" style="display:none;">+ Add a new section (e.g. for today's words)</button>
   <div class="new-section-form" id="newSectionForm">
-    <input type="text" id="newSectionTitle" placeholder="Section title, e.g. 22. Miércoles 25 de noviembre">
+    <input type="text" id="newSectionTitle" placeholder="Section title, e.g. 25. Miércoles 25 de noviembre">
     <div class="add-row" style="display:block;">
       <div class="btns">
         <button class="save-btn" id="saveSectionBtn">Add section</button>
@@ -133,7 +133,7 @@
    and redeploy. This tells every iPad "there's a new version on the
    server" so it replaces its saved copy with this one automatically.
    Each phrase is [spanish, english, soundsLike]. */
-const DATA_VERSION = 21;
+const DATA_VERSION = 22;
 
 const DEFAULT_DATA = {
   version: DATA_VERSION,
@@ -548,7 +548,45 @@ const DEFAULT_DATA = {
   },
   {
     "id": "s7",
-    "title": "7. Los Pronombres — Subject Pronouns",
+    "title": "7. Las Operaciones — Maths Operators",
+    "color": "#1d4ed8",
+    "bg": "#eff6ff",
+    "phrases": [
+      [
+        "más",
+        "plus (+)",
+        "MAHS"
+      ],
+      [
+        "menos",
+        "minus (−)",
+        "MEH-nohs"
+      ],
+      [
+        "por",
+        "multiplied by (×)",
+        "por"
+      ],
+      [
+        "dividido por",
+        "divided by (÷)",
+        "dee-vee-DEE-doh por"
+      ],
+      [
+        "es igual a",
+        "equals (=)",
+        "ehs ee-GWAHL ah"
+      ],
+      [
+        "Dos más tres es igual a cinco",
+        "Two plus three equals five",
+        "dohs MAHS trehs ehs ee-GWAHL ah SEEN-koh"
+      ]
+    ]
+  },
+  {
+    "id": "s8",
+    "title": "8. Los Pronombres — Subject Pronouns",
     "color": "#1f8a8a",
     "bg": "#e9fafa",
     "phrases": [
@@ -585,8 +623,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s8",
-    "title": "8. El Verbo Tener — To Have",
+    "id": "s9",
+    "title": "9. El Verbo Tener — To Have",
     "color": "#c2410c",
     "bg": "#fff1ea",
     "phrases": [
@@ -623,8 +661,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s9",
-    "title": "9. Tengo... & El Verbo Estar — To Be",
+    "id": "s10",
+    "title": "10. Tengo... & El Verbo Estar — To Be",
     "color": "#4d6608",
     "bg": "#f6f9e6",
     "phrases": [
@@ -701,8 +739,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s10",
-    "title": "10. Decir Cómo Estás — Saying How You Are",
+    "id": "s11",
+    "title": "11. Decir Cómo Estás — Saying How You Are",
     "color": "#3b5bdb",
     "bg": "#eef1fe",
     "phrases": [
@@ -769,8 +807,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s11",
-    "title": "11. El Aula — Classroom Objects",
+    "id": "s12",
+    "title": "12. El Aula — Classroom Objects",
     "color": "#a21caf",
     "bg": "#fdf2fe",
     "phrases": [
@@ -942,8 +980,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s12",
-    "title": "12. Los Días de la Semana — Days of the Week",
+    "id": "s13",
+    "title": "13. Los Días de la Semana — Days of the Week",
     "color": "#0369a1",
     "bg": "#eaf6fd",
     "phrases": [
@@ -1020,8 +1058,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s13",
-    "title": "13. Las Asignaturas — School Subjects",
+    "id": "s14",
+    "title": "14. Las Asignaturas — School Subjects",
     "color": "#9a4f12",
     "bg": "#fdf4ec",
     "phrases": [
@@ -1163,8 +1201,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s14",
-    "title": "14. Mis Opiniones — What I Think of My Subjects",
+    "id": "s15",
+    "title": "15. Mis Opiniones — What I Think of My Subjects",
     "color": "#be123c",
     "bg": "#fff0f3",
     "phrases": [
@@ -1286,8 +1324,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s15",
-    "title": "15. Las Vacaciones — Holidays",
+    "id": "s16",
+    "title": "16. Las Vacaciones — Holidays",
     "color": "#0f766e",
     "bg": "#ecfdf9",
     "phrases": [
@@ -1314,8 +1352,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s16",
-    "title": "16. El Verbo Ir — To Go",
+    "id": "s17",
+    "title": "17. El Verbo Ir — To Go",
     "color": "#5b21b6",
     "bg": "#f5f0ff",
     "phrases": [
@@ -1367,8 +1405,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s17",
-    "title": "17. Los Meses del Año — Months of the Year",
+    "id": "s18",
+    "title": "18. Los Meses del Año — Months of the Year",
     "color": "#15803d",
     "bg": "#effaf2",
     "phrases": [
@@ -1440,8 +1478,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s18",
-    "title": "18. Los Colores — Colours",
+    "id": "s19",
+    "title": "19. Los Colores — Colours",
     "color": "#0e7490",
     "bg": "#ecfeff",
     "phrases": [
@@ -1513,8 +1551,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s19",
-    "title": "19. Los Ojos y el Pelo — Eyes & Hair",
+    "id": "s20",
+    "title": "20. Los Ojos y el Pelo — Eyes & Hair",
     "color": "#475569",
     "bg": "#f1f5f9",
     "phrases": [
@@ -1641,8 +1679,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s20",
-    "title": "20. ¿Cómo Vas al Colegio? — Getting to School",
+    "id": "s21",
+    "title": "21. ¿Cómo Vas al Colegio? — Getting to School",
     "color": "#4338ca",
     "bg": "#eef2ff",
     "phrases": [
@@ -1689,8 +1727,8 @@ const DEFAULT_DATA = {
     ]
   },
   {
-    "id": "s21",
-    "title": "21. Los Números — Numbers 32 to 99",
+    "id": "s22",
+    "title": "22. Los Números — Numbers 32 to 99",
     "color": "#a16207",
     "bg": "#fefce8",
     "phrases": [
@@ -1748,6 +1786,102 @@ const DEFAULT_DATA = {
         "noventa y nueve",
         "99 — ninety-nine",
         "noh-VEHN-tah ee NWEH-veh"
+      ]
+    ]
+  },
+  {
+    "id": "s23",
+    "title": "23. El Verbo Ser — To Be",
+    "color": "#be185d",
+    "bg": "#fdf2f8",
+    "phrases": [
+      [
+        "ser",
+        "to be",
+        "sehr"
+      ],
+      [
+        "yo soy",
+        "I am",
+        "yoh SOY"
+      ],
+      [
+        "tú eres",
+        "you are (singular)",
+        "too EH-rehs"
+      ],
+      [
+        "él / ella es",
+        "he / she is",
+        "ehl / EH-yah EHS"
+      ],
+      [
+        "nosotros / nosotras somos",
+        "we are (masculine / feminine)",
+        "noh-SOH-trohs / noh-SOH-trahs SOH-mohs"
+      ],
+      [
+        "vosotros / vosotras sois",
+        "you are (plural masculine / feminine)",
+        "voh-SOH-trohs / voh-SOH-trahs SOYS"
+      ],
+      [
+        "ellos / ellas son",
+        "they are (masculine / feminine)",
+        "EH-yohs / EH-yahs SOHN"
+      ]
+    ]
+  },
+  {
+    "id": "s24",
+    "title": "24. ¿Cómo Eres? — Describing Yourself",
+    "color": "#047857",
+    "bg": "#ecfdf5",
+    "phrases": [
+      [
+        "¿Cómo eres?",
+        "What are you like?",
+        "KOH-moh EH-rehs"
+      ],
+      [
+        "alto / alta",
+        "tall (m. / f.)",
+        "AHL-toh / AHL-tah"
+      ],
+      [
+        "bajo / baja",
+        "short (m. / f.)",
+        "BAH-hoh / BAH-hah"
+      ],
+      [
+        "simpático / simpática",
+        "nice (m. / f.)",
+        "seem-PAH-tee-koh / seem-PAH-tee-kah"
+      ],
+      [
+        "activo / activa",
+        "active (m. / f.)",
+        "ahk-TEE-voh / ahk-TEE-vah"
+      ],
+      [
+        "creativo / creativa",
+        "creative (m. / f.)",
+        "kreh-ah-TEE-voh / kreh-ah-TEE-vah"
+      ],
+      [
+        "responsable",
+        "responsible",
+        "rehs-pohn-SAH-bleh"
+      ],
+      [
+        "Yo soy alta y simpática",
+        "I am tall and nice",
+        "yoh SOY AHL-tah ee seem-PAH-tee-kah"
+      ],
+      [
+        "el cabello",
+        "hair",
+        "ehl kah-BEH-yoh"
       ]
     ]
   }
@@ -1863,10 +1997,12 @@ let playAll = null;       // the run in progress: { token, btn, label, row, time
 let currentUtter = null;  // kept so Safari doesn't drop the utterance mid-speech
 let wakeLock = null;
 
-/* Tidy a phrase for reading aloud: "1 — one" -> "one", "a / b" -> "a, b" */
+/* Tidy a phrase for reading aloud: "1 — one" -> "one", "a / b" -> "a, b",
+   "plus (+)" -> "plus" (maths symbols in brackets are for reading only) */
 function speechText(text) {
   return (text || '')
     .replace(/^\d+\s*—\s*/, '')
+    .replace(/\s*\([+\-−×÷=]\)/g, '')
     .replace(/\(m\. \/ f\.\)/g, '(masculine or feminine)')
     .replace(/\.\.\./g, ' ')
     .replace(/\s+\/\s+/g, ', ')
